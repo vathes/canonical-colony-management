@@ -21,6 +21,9 @@ class Sequence(dj.Lookup):
 
 
 class Allele(dj.Lookup):
+
+    _Source = ...
+
     definition = """
     allele                      : varchar(255)    # informal name of an allele
     ---
@@ -31,7 +34,7 @@ class Allele(dj.Lookup):
         definition = """
         -> master
         ---
-        -> Source
+        -> master._Source
         source_identifier=''        : varchar(255)    # id inside the line provider
         source_url=''               : varchar(255)    # link to the line information
         expression_data_url=''      : varchar(255)    # link to the expression pattern from Allen institute brain atlas
@@ -61,6 +64,12 @@ class Line(dj.Lookup):
 
 
 class Subject(dj.Manual):
+
+    _Lab = ...
+    _Protocol = ...
+    _User = ...
+    _Source = ...
+
     definition = """
     subject                 : varchar(32)
     ---
@@ -69,18 +78,18 @@ class Subject(dj.Manual):
     subject_desc=''         : varchar(1024)
     """
 
-    ## idea here: when query the master table,
-    ## return part table columns if entries exist
+    # idea here: when query the master table,
+    # return part table columns if entries exist
     class Protocol(dj.Part):
         definition = """
         -> master
-        -> lab.Protocol
+        -> master._Protocol
         """
 
     class User(dj.Part):
         definition = """
         -> master
-        -> lab.User
+        -> master._User
         """
 
     class Line(dj.Part):
@@ -101,13 +110,13 @@ class Subject(dj.Manual):
         definition = """
         -> master
         ---
-        -> Source
+        -> master._Source
         """
 
     class Lab(dj.Part):
         definition = """
         -> master
-        -> lab.Lab
+        -> master._Lab
         ---
         subject_alias=''    : varchar(32)  # alias of the subject in this lab, if different from the id
         """
@@ -124,7 +133,7 @@ class SubjectDeath(dj.Manual):
 # --- optional ----
 class SubjectCullMethod(dj.Manual):
     definition = """
-    -> master
+    -> Subject
     ---
     cull_method:    varchar(255)
     """
@@ -185,20 +194,23 @@ class SubjectLitter(dj.Manual):
 
 class Cage(dj.Lookup):
     definition = """
-    cage: varchar(64)   # cage identifying info
+    cage            : varchar(64)   # cage identifying info
     ---
-    cage_purpose="": varchar(128)  # cage purpose
+    cage_purpose='' : varchar(128)  # cage purpose
     """
 
 
-class AnimalCaging(dj.Manual):
+class SubjectCaging(dj.Manual):
+
+    _User = ...
+
     definition = """
     # record of animal caging
-    -> Animal
+    -> Subject
     caging_datetime     : datetime   # date of cage entry
     ---
     -> Cage
-    -> lab.User           # person associated with the cage transfer
+    -> self._User           # person associated with the cage transfer
     """
 
 
