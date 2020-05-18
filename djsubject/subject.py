@@ -3,7 +3,6 @@ from djutils import templates
 
 
 required_table_names = ('Lab', 'User', 'Source', 'Protocol')
-
 schema_template = templates.SchemaTemplate(required_table_names)
 
 
