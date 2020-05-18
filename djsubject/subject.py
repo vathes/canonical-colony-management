@@ -1,6 +1,13 @@
 import datajoint as dj
+from djutils import templates
 
 
+required_table_names = ('Lab', 'User', 'Source', 'Protocol')
+
+schema_template = templates.SchemaTemplate(required_table_names)
+
+
+@schema_template
 class Strain(dj.Lookup):
     # strain of animal, C57/Bl6
     definition = """
@@ -11,6 +18,7 @@ class Strain(dj.Lookup):
     """
 
 
+@schema_template
 class Sequence(dj.Lookup):
     definition = """
     sequence            : varchar(32)	# informal name of a sequence
@@ -20,6 +28,7 @@ class Sequence(dj.Lookup):
     """
 
 
+@schema_template
 class Allele(dj.Lookup):
 
     _Source = ...
@@ -47,6 +56,7 @@ class Allele(dj.Lookup):
         """
 
 
+@schema_template
 class Line(dj.Lookup):
     definition = """
     line                    : varchar(32)	# informal name of a line
@@ -63,6 +73,7 @@ class Line(dj.Lookup):
         """
 
 
+@schema_template
 class Subject(dj.Manual):
 
     _Lab = ...
@@ -122,6 +133,7 @@ class Subject(dj.Manual):
         """
 
 
+@schema_template
 class SubjectDeath(dj.Manual):
     definition = """
     -> Subject
@@ -130,7 +142,7 @@ class SubjectDeath(dj.Manual):
     """
 
 
-# --- optional ----
+@schema_template
 class SubjectCullMethod(dj.Manual):
     definition = """
     -> Subject
@@ -139,6 +151,7 @@ class SubjectCullMethod(dj.Manual):
     """
 
 
+@schema_template
 class BreedingPair(dj.Manual):
     definition = """
     -> Line
@@ -160,7 +173,7 @@ class BreedingPair(dj.Manual):
         -> Subject
         """
 
-
+@schema_template
 class Litter(dj.Manual):
     definition = """
     # litter information, ingest when
@@ -172,6 +185,7 @@ class Litter(dj.Manual):
     """
 
 
+@schema_template
 class Weaning(dj.Manual):
     definition = """
     # weaning information
@@ -184,6 +198,7 @@ class Weaning(dj.Manual):
     """
 
 
+@schema_template
 class SubjectLitter(dj.Manual):
     definition = """
     -> Subject
@@ -192,6 +207,7 @@ class SubjectLitter(dj.Manual):
     """
 
 
+@schema_template
 class Cage(dj.Lookup):
     definition = """
     cage            : varchar(64)   # cage identifying info
@@ -200,6 +216,7 @@ class Cage(dj.Lookup):
     """
 
 
+@schema_template
 class SubjectCaging(dj.Manual):
 
     _User = ...
@@ -214,6 +231,7 @@ class SubjectCaging(dj.Manual):
     """
 
 
+@schema_template
 class GenotypeTest(dj.Manual):
     definition = """
     -> Subject
@@ -224,6 +242,7 @@ class GenotypeTest(dj.Manual):
     """
 
 
+@schema_template
 class Zygosity(dj.Manual):
     definition = """
     -> Subject

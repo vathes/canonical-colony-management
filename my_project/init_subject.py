@@ -1,17 +1,15 @@
 import datajoint as dj
-from djlab import pipeline as lab_pipeline
-from djsubject import pipeline as subj_pipeline
+from djlab import schema_template as lab
+from djsubject import schema_template as subject
 
-lab_schema = dj.schema('u24_lab_')
-subj_schema = dj.schema('u24_subject_')
 
 # initiate lab pipeline
-lab_tables = lab_pipeline.init_pipeline(lab_schema)
+lab.declare_tables(dj.schema('u24_lab_'))
 
-requirements = {'Lab': lab_tables['Lab'],
-                'User': lab_tables['User'],
-                'Source': lab_tables['Source'],
-                'Protocol': lab_tables['Protocol']}
-
-subject_tables = subj_pipeline.init_pipeline(
-    subj_schema, requirements, add_here=True)
+subject.declare_tables(
+    dj.schema('u24_subject_'),
+    requirements = {'Lab': lab.Lab,
+                    'User': lab.User,
+                    'Source': lab.Source,
+                    'Protocol': lab.Protocol},
+    add_here=True)
