@@ -1,12 +1,11 @@
 import datajoint as dj
-from djutils import templates
+from djutils.templates import SchemaTemplate
 
 
-required_table_names = ('Lab', 'User', 'Source', 'Protocol')
-schema_template = templates.SchemaTemplate(required_table_names)
+schema = SchemaTemplate()
 
 
-@schema_template
+@schema
 class Strain(dj.Lookup):
     # strain of animal, C57/Bl6
     definition = """
@@ -17,7 +16,7 @@ class Strain(dj.Lookup):
     """
 
 
-@schema_template
+@schema
 class Sequence(dj.Lookup):
     definition = """
     sequence            : varchar(32)	# informal name of a sequence
@@ -27,7 +26,7 @@ class Sequence(dj.Lookup):
     """
 
 
-@schema_template
+@schema
 class Allele(dj.Lookup):
 
     _Source = ...
@@ -55,7 +54,7 @@ class Allele(dj.Lookup):
         """
 
 
-@schema_template
+@schema
 class Line(dj.Lookup):
     definition = """
     line                    : varchar(32)	# informal name of a line
@@ -72,7 +71,7 @@ class Line(dj.Lookup):
         """
 
 
-@schema_template
+@schema
 class Subject(dj.Manual):
 
     _Lab = ...
@@ -132,7 +131,7 @@ class Subject(dj.Manual):
         """
 
 
-@schema_template
+@schema
 class SubjectDeath(dj.Manual):
     definition = """
     -> Subject
@@ -141,7 +140,7 @@ class SubjectDeath(dj.Manual):
     """
 
 
-@schema_template
+@schema
 class SubjectCullMethod(dj.Manual):
     definition = """
     -> Subject
@@ -150,7 +149,7 @@ class SubjectCullMethod(dj.Manual):
     """
 
 
-@schema_template
+@schema
 class BreedingPair(dj.Manual):
     definition = """
     -> Line
@@ -160,19 +159,22 @@ class BreedingPair(dj.Manual):
     bp_end_date=null        : date			        # end date
     bp_desc=''              :	varchar(2048)		# description
     """
+
     class Father(dj.Part):
         definition = """
         -> master
         ---
         -> Subject
         """
+
     class Mother(dj.Part):
         definition = """
         -> master
         -> Subject
         """
 
-@schema_template
+
+@schema
 class Litter(dj.Manual):
     definition = """
     # litter information, ingest when
@@ -184,7 +186,7 @@ class Litter(dj.Manual):
     """
 
 
-@schema_template
+@schema
 class Weaning(dj.Manual):
     definition = """
     # weaning information
@@ -197,7 +199,7 @@ class Weaning(dj.Manual):
     """
 
 
-@schema_template
+@schema
 class SubjectLitter(dj.Manual):
     definition = """
     -> Subject
@@ -206,7 +208,7 @@ class SubjectLitter(dj.Manual):
     """
 
 
-@schema_template
+@schema
 class Cage(dj.Lookup):
     definition = """
     cage            : varchar(64)   # cage identifying info
@@ -215,7 +217,7 @@ class Cage(dj.Lookup):
     """
 
 
-@schema_template
+@schema
 class SubjectCaging(dj.Manual):
 
     _User = ...
@@ -230,7 +232,7 @@ class SubjectCaging(dj.Manual):
     """
 
 
-@schema_template
+@schema
 class GenotypeTest(dj.Manual):
     definition = """
     -> Subject
@@ -241,7 +243,7 @@ class GenotypeTest(dj.Manual):
     """
 
 
-@schema_template
+@schema
 class Zygosity(dj.Manual):
     definition = """
     -> Subject
