@@ -6,7 +6,7 @@ import sys
 here = path.abspath(path.dirname(__file__))
 
 long_description = """"
-Canonical DataJoint pipeline for colony management
+Canonical DataJoint for colony management
 """
 
 with open(path.join(here, 'requirements.txt')) as f:
