@@ -1,1 +1,1 @@
-from .subject import schema
+from .subject import schema as subject
